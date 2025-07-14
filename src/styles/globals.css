@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@theme {
+  /* swap this out for Courier New */
+  --font-satoshi: "Courier New", monospace;
+}
+
+/* your existing layers here… */
+
+@layer utilities {
+  .font-satoshi {
+    font-family: var(--font-satoshi);
+  }
+}
+
+/* in globals.css */
+
+@keyframes spinArc {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-line {
+  /* ensure the arc spins around its own center */
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: spinArc 0.6s linear infinite;
+}
+
+/* 1. Declare Anton from your public/fonts folder */
+@font-face {
+  font-family: "Anton";
+  src: url("/fonts/Anton-Regular.woff2") format("woff2"),
+    url("/fonts/Anton-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Then bring in Tailwind layers */
+
+/* 2. Inject a utility or target tags in the base layer */
+
+/* Bevelier Black */
+@font-face {
+  font-family: "Bevelier";
+  src: url("/fonts/Bevelier-Black.woff2") format("woff2"),
+    url("/fonts/Bevelier-Black.woff") format("woff");
+  font-weight: 900; /* Black weight */
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 3) Inject simple utilities in the base layer   */
+@layer base {
+  /* headings default to Bevelier Black */
+  h1,
+  h2,
+  h3,
+  .font-bevelier {
+    font-family: "Bevelier", sans-serif;
+  }
+
+  /* use Anton via .font-anton */
+  .font-anton {
+    font-family: "Anton", sans-serif;
+  }
+}
+
+/* globals.css */
+
+/* Sharpie ExtraBold for headings */
+@font-face {
+  font-family: "Sharpie";
+  src: url("/fonts/Sharpie-Extrabold.woff2") format("woff2"),
+    url("/fonts/Sharpie-Extrabold.woff") format("woff");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Ranade Light for body text */
+@font-face {
+  font-family: "Ranade Light";
+  src: url("/fonts/Ranade-Light.woff2") format("woff2"),
+    url("/fonts/Ranade-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Utility classes to use them without a tailwind.config.js */
+.heading-font {
+  font-family: "Sharpie", cursive;
+}
+
+.text-font {
+  font-family: "Ranade Light", serif;
+}
+
+@keyframes shine {
+  0% {
+    background-position: -200%;
+  }
+  100% {
+    background-position: 200%;
+  }
+}
+
+.shine {
+  /* text is filled by a gradient that moves */
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(37, 31, 31, 0.8) 50%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: shine 15s infinite ease-in-out;
+}
