@@ -17,7 +17,7 @@
     "@rive-app/react-canvas": "^4.21.3",
     "@splinetool/react-spline": "^4.0.0",
     "animejs": "^4.0.2",
-    "framer-motion": "^12.19.2",
+    "framer-motion": "^12.23.6",
     "gsap": "^3.13.0",
     "lottie-react": "^2.4.1",
     "motion": "^12.19.2",

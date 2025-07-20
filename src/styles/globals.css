@@ -99,25 +99,121 @@
   font-family: "Ranade Light", serif;
 }
 
-@keyframes shine {
-  0% {
-    background-position: -200%;
-  }
-  100% {
-    background-position: 200%;
+/* globals.css */
+
+/* 1) register your font files */
+@font-face {
+  font-family: "Awesome";
+  src:
+    /* if you add woff2 later put that first: */
+    /* url("/fonts/Awesome-Regular.woff2") format("woff2"), */ url("/fonts/Awesome-Regular.otf")
+      format("opentype"),
+    url("/fonts/Awesome-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 2) define a tiny “font-awesome” utility */
+@layer utilities {
+  .font-awesome {
+    font-family: "Awesome", sans-serif !important;
   }
 }
 
-.shine {
-  /* text is filled by a gradient that moves */
+/* 1) Load your Gilbert Color Bold font files */
+@font-face {
+  font-family: "GilbertColorBold";
+  /* adjust the formats/paths if you ever add .woff/.woff2 versions */
+  src: url("/fonts/Gilbert-Color-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 2) Expose a utility class for easy use */
+@layer utilities {
+  .font-gilbert {
+    font-family: "GilbertColorBold", sans-serif !important;
+  }
+}
+
+/* 1) register your Earwig Factory RG font */
+@font-face {
+  font-family: "EarwigFactoryRG";
+  src: url("/fonts/earwig-factory-rg.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 2) expose a tiny utility class */
+@layer utilities {
+  .font-earwig {
+    font-family: "EarwigFactoryRG", sans-serif !important;
+  }
+}
+
+/* -------------------------------------------------- */
+/* 2) post‑reveal neon‑pulse + gradient sweep effect   */
+/* -------------------------------------------------- */
+
+@keyframes neon-pulse {
+  0%,
+  100% {
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.8),
+      0 0 8px rgba(173, 20, 114, 0.6), 0 0 16px rgba(108, 18, 81, 0.6);
+  }
+  50% {
+    text-shadow: 0 0 6px rgba(255, 255, 255, 1),
+      0 0 12px rgba(173, 20, 114, 0.8), 0 0 24px rgba(108, 18, 81, 0.8);
+  }
+}
+
+@keyframes gradient-sweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* This class kicks in after the reveal animation */
+.post-reveal-glow {
+  /* gradient fill  */
   background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.2) 0%,
-    rgba(37, 31, 31, 0.8) 50%,
-    rgba(255, 255, 255, 0.2) 100%
+    45deg,
+    rgba(255, 123, 212, 1) 0%,
+    rgba(140, 86, 249, 1) 50%,
+    rgba(18, 194, 233, 1) 100%
   );
-  background-size: 200% 100%;
+  background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  animation: shine 15s infinite ease-in-out;
+
+  /* sweep */
+  background-size: 200% 200%;
+  animation: gradient-sweep 4s ease-in-out infinite,
+    neon-pulse 2.5s ease-in-out infinite alternate;
+}
+
+.perspective {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
