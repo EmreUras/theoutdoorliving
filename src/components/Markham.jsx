@@ -5,7 +5,10 @@ export default function Markham() {
   return (
     <section className="w-full flex flex-col md:flex-row items-center justify-center gap-20 max-w-5xl mx-auto px-4 py-20">
       {/* Text on the left */}
-      <div className="w-full md:w-1/2 text-gray-800 text-sm sm:text-base leading-relaxed text-center md:text-left font-mono">
+      <div
+        className="w-full md:w-1/2 text-gray-800 text-sm sm:text-base leading-relaxed 
+      text-center md:text-left font-sans"
+      >
         <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-center font-anton">
           Markham Property Cleanup
         </h2>

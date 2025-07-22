@@ -13,7 +13,7 @@ export default function HeroSection() {
         className="
           text-[1.6rem] sm:text-[3.7rem] md:text-[3rem] lg:text-[4.6rem]
          font-earwig
-          text-center mb-0
+          text-center mb-10
           text-gray-50
         "
       >

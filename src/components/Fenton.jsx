@@ -33,13 +33,13 @@ export default function Fenton() {
 
   return (
     <section className="pt-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto text-gray-800">
         <h3 className="text-2xl sm:text-3xl font-bold mb-4 text-center font-anton">
           Fenton Commercial Cleanup
         </h3>
         <p
-          className="text-gray-800 text-sm sm:text-base leading-relaxed 
-        max-w-3xl mx-auto text-center mb-12 font-mono"
+          className=" text-sm sm:text-base leading-relaxed 
+        max-w-3xl mx-auto text-center mb-12 font-sans"
         >
           This commercial lot was heavily overgrown, unkept, and cluttered with
           unmanaged greenery and weeds. We transformed the space by trimming,

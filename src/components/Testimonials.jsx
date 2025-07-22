@@ -80,15 +80,17 @@ export default function Testimonials() {
   return (
     <section className="py-20  text-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-16 font-anton text-white">
+        <h2 className="text-5xl md:text-7xl font-anton text-center mb-16 text-gray-800 drop-shadow-lg">
           What Our Clients Say
         </h2>
         <div className="relative w-full flex justify-center items-center">
-          <div className="relative h-64 w-full flex items-center justify-center font-mono">
+          <div className="relative h-64 w-full flex items-center justify-center ">
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
-                className="absolute w-60 md:w-72 h-auto p-4 bg-white text-black rounded-xl shadow-md transition-all duration-700 ease-in-out text-center font-mono"
+                className="absolute w-60 md:w-72 h-auto p-4 bg-white
+                 text-black rounded-xl shadow-xl transition-all duration-700 
+                 ease-in-out text-center font-sans"
                 style={getStyle(index)}
               >
                 <p className="text-sm md:text-base mb-4">

@@ -23,7 +23,7 @@ export default function BeforeAfterVideo({
 
   return (
     <div
-      className="w-full flex flex-col md:flex-row items-center md:items-center 
+      className="w-full flex flex-col-reverse md:flex-row items-center md:items-center 
       justify-center gap-28 max-w-5xl mx-auto"
     >
       {/* Video */}
@@ -42,9 +42,9 @@ export default function BeforeAfterVideo({
       {/* Text */}
       <div
         className="w-full md:w-1/2 max-w-xl px-2 text-gray-800 
-      text-sm sm:text-base leading-relaxed text-center md:text-left font-mono"
+      text-sm sm:text-base leading-relaxed text-center md:text-left font-sans "
       >
-        <h3 className="text-xl font-semibold mb-3 font-anton">
+        <h3 className="text-xl font-semibold mb-3 font-anton ">
           Lawn Transformation: From Neglected to Polished
         </h3>
         <p>

@@ -154,6 +154,20 @@
   }
 }
 
+@font-face {
+  font-family: "YoungerThanMe";
+  src: url("/fonts/Younger-than-me.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer utilities {
+  .font-younger {
+    font-family: "YoungerThanMe", sans-serif !important;
+  }
+}
+
 /* -------------------------------------------------- */
 /* 2) post‑reveal neon‑pulse + gradient sweep effect   */
 /* -------------------------------------------------- */

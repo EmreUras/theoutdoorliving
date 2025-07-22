@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React, { useState } from "react";
 import { FiMaximize2 } from "react-icons/fi";
 
@@ -14,11 +15,14 @@ export default function Milton() {
 
   return (
     <section className="py-30 px-4">
-      <div className="max-w-6xl mx-auto text-center">
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-anton mb-8">
+      <div className="max-w-6xl mx-auto text-center text-gray-800">
+        <h2 className="text-3xl sm:text-4xl font-anton mb-6 text-center">
           Milton Property Maintenance
         </h2>
-        <p className="text-lg sm:text-xl md:text-sm text-gray-800 font-mono max-w-3xl mx-auto mb-16">
+        <p
+          className=" font-sans 
+        text-sm sm:text-base leading-relaxed max-w-3xl mx-auto text-center mb-12"
+        >
           Our team is responsible for maintaining all garden beds and green
           areas at the Milton property. This ongoing maintenance contract
           includes seasonal care, mulching, trimming, weeding, and overall
@@ -26,10 +30,15 @@ export default function Milton() {
           vibrant, and professionally groomed year-round.
         </p>
 
-        <div className="relative w-full max-w-4xl mx-auto h-[400px] sm:h-[500px] rounded-xl overflow-hidden shadow-xl group">
-          <img
+        <div
+          className="relative w-full max-w-4xl mx-auto h-[400px] sm:h-[500px] 
+        rounded-xl overflow-hidden shadow-2xl group"
+        >
+          <Image
             src="/portfolio/Milton/Maintenance.jpg"
             alt="Milton Maintenance"
+            width={1920}
+            height={1080}
             className="w-full h-full object-cover object-center"
           />
           <button

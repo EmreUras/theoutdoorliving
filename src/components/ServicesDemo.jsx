@@ -1,137 +1,97 @@
-// src/components/ServicesDemo.jsx
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+import React from "react";
 
-// 1) Define your services and descriptions
 const SERVICES = [
   {
     id: 1,
     title: "Property Maintenance & Lawn Cutting/Trimming",
-    desc: "Regular lawn mowing, precise trimming, and complete property upkeep.",
+    desc: "Keep your lawn neat, healthy, and perfectly trimmed.",
   },
   {
     id: 2,
     title: "Litter Pick-Up",
-    desc: "Removal of all debris, leaves, and general litter.",
+    desc: "Removal of debris, litter, and general waste.",
   },
   {
     id: 3,
     title: "Fertilization & Weed Control",
-    desc: "Targeted fertilization and effective weed management.",
+    desc: "Boost plant health and eliminate unwanted weeds.",
   },
   {
     id: 4,
     title: "Pruning / Removal of Trees, Bushes & Shrubs",
-    desc: "Safe pruning or removal of overgrown vegetation.",
+    desc: "Safely remove or trim overgrown greenery.",
   },
   {
     id: 5,
     title: "Planting",
-    desc: "Seasonal planting of flowers, shrubs, and greenery.",
+    desc: "Seasonal planting of flowers, shrubs, and trees.",
   },
   {
     id: 6,
     title: "Fall / Spring Clean-Up",
-    desc: "Thorough seasonal cleanup of leaves and debris.",
+    desc: "Clean and prep your yard for new seasons.",
   },
   {
     id: 7,
     title: "Excavation",
-    desc: "Site preparation, grading, and small-scale excavation.",
+    desc: "Site prep, grading, trenching & more.",
   },
   {
     id: 8,
     title: "Interlock Installation",
-    desc: "Professional interlocking pavers for drives and walkways.",
+    desc: "Pavers for paths, patios, and driveways.",
   },
   {
     id: 9,
     title: "Retaining Walls",
-    desc: "Constructing and repairing garden or landscape walls.",
+    desc: "Durable walls to shape and support your yard.",
   },
   {
     id: 10,
     title: "Curbs & Garden Edging",
-    desc: "Clean edging for beds, walkways, and driveways.",
+    desc: "Sharp, clean lines for tidy landscaping.",
   },
   {
     id: 11,
     title: "Sod Removal / Installation",
-    desc: "Old turf removal and fresh sod installation.",
+    desc: "Out with the old, in with the lush green sod.",
   },
 ];
 
 export default function ServicesDemo() {
-  // 2) Plain JS useState + refs
-  const [openId, setOpenId] = useState(null);
-  const containerRef = useRef(null);
-  const [popoverStyle, setPopoverStyle] = useState({});
-
-  // 3) When openId changes, recalc popover position
-  useEffect(() => {
-    if (openId !== null && containerRef.current) {
-      const el = containerRef.current.querySelector(`#card-${openId}`);
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        setPopoverStyle({
-          position: "absolute",
-          top: rect.bottom + window.scrollY + 8,
-          left: rect.left + window.scrollX,
-          width: rect.width,
-          zIndex: 50,
-        });
-      }
-    }
-  }, [openId]);
-
   return (
-    <section
-      ref={containerRef}
-      className="flex flex-col md:flex-row items-start p-6 md:p-12 gap-8 font-anton relative"
-    >
-      {/* LEFT: fixed image */}
-      <img
-        src="/what_we_do.png"
-        alt="What We Do"
-        className="hidden md:block object-contain max-w-xs"
-      />
+    <section className="w-full px-6 md:px-16 py-24 relative z-10">
+      <h2 className="text-5xl md:text-7xl font-anton text-center mb-16 text-gray-800 drop-shadow-lg">
+        What We Do
+      </h2>
 
-      {/* RIGHT: the list */}
-      <div className="flex-1">
-        <h2 className="text-5xl md:text-5xl lg:text-8xl  mb-8 text-center md:text-left heading-font">
-          What We Do
-        </h2>
-
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {SERVICES.map((svc) => (
-            <li
-              key={svc.id}
-              id={`card-${svc.id}`}
-              onClick={() => setOpenId(openId === svc.id ? null : svc.id)}
-              className={`
-                relative flex items-center space-x-3
-                cursor-pointer rounded-xl
-                bg-white py-4 px-6
-                transition-transform duration-300 ease-out
-                hover:scale-105
-                ${openId === svc.id ? "ring-2 ring-green-500" : ""}
-              `}
-            >
-              <span className="text-green-600 text-2xl">✔️</span>
-              <span className="text-lg md:text-xl">{svc.title}</span>
-            </li>
-          ))}
-        </ul>
-
-        {/* POPOVER */}
-        {openId !== null && (
-          <div style={popoverStyle}>
-            <div className="bg-white p-4 rounded-lg shadow-lg text-gray-800 text-base">
-              {SERVICES.find((s) => s.id === openId)?.desc}
-            </div>
-          </div>
-        )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {SERVICES.map((service, index) => (
+          <motion.div
+            key={service.id}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.5,
+              delay: index * 0.05,
+              ease: "easeOut",
+            }}
+            viewport={{ once: true }}
+            className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl 
+            p-6 hover:shadow-xl transition-all duration-300 hover:scale-105 
+            cursor-pointer group"
+          >
+            <h3 className="text-lg font-semibold text-black flex items-start gap-2">
+              <span>✅</span> <span>{service.title}</span>
+            </h3>
+            <p className="text-sm text-black/80 mt-2 group-hover:text-white transition-colors">
+              {service.desc}
+            </p>
+          </motion.div>
+        ))}
       </div>
     </section>
   );

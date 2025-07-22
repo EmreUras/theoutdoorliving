@@ -29,11 +29,14 @@ export default function GardenBedRestoration() {
 
   return (
     <section className="pt-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto text-gray-800 ">
         <h3 className="text-3xl sm:text-4xl font-anton mb-6 text-center">
           Garden Bed Restoration
         </h3>
-        <p className="text-gray-700 font-mono text-sm sm:text-base leading-relaxed max-w-3xl mx-auto text-center mb-12">
+        <p
+          className="font-sans 
+        text-sm sm:text-base leading-relaxed max-w-3xl mx-auto text-center mb-12"
+        >
           Our garden bed restoration service involves a complete transformation
           of your existing flower beds. This includes the removal of overgrown
           or unhealthy shrubs, outdated mulch, and compacted soil. We refresh

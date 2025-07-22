@@ -4,19 +4,14 @@
 <ellipse cx="391.069" cy="829.395" rx="937.023" ry="918.887" fill="#236D65"/>
 <ellipse cx="125.807" cy="933.347" rx="941.369" ry="1065.74" fill="#237A72"/>
 <ellipse cx="-192.609" cy="1108.48" rx="941.369" ry="1065.74" fill="#26867D"/>
-<ellipse cx="-383.658" cy="1366.39" rx="941.369" ry="1065.74" fill="#268C82"/>
-<ellipse cx="1252.89" cy="3537.45" rx="937.023" ry="918.887" transform="rotate(-180 1252.89 3537.45)" fill="#236D65"/>
-<ellipse cx="1518.15" cy="3433.5" rx="941.369" ry="1065.74" transform="rotate(-180 1518.15 3433.5)" fill="#237A72"/>
-<ellipse cx="1836.57" cy="3258.37" rx="941.369" ry="1065.74" transform="rotate(-180 1836.57 3258.37)" fill="#26867D"/>
-<ellipse cx="2027.62" cy="3000.45" rx="941.369" ry="1065.74" transform="rotate(-180 2027.62 3000.45)" fill="#268C82"/>
-<ellipse cx="-463.205" cy="6678.62" rx="937.023" ry="918.887" transform="rotate(-180 -463.205 6678.62)" fill="#236D65"/>
-<ellipse cx="-197.942" cy="6574.67" rx="941.369" ry="1065.74" transform="rotate(-180 -197.942 6574.67)" fill="#237A72"/>
-<ellipse cx="120.474" cy="6399.54" rx="941.369" ry="1065.74" transform="rotate(-180 120.474 6399.54)" fill="#26867D"/>
-<ellipse cx="311.523" cy="6141.63" rx="941.369" ry="1065.74" transform="rotate(-180 311.523 6141.63)" fill="#268C82"/>
-<ellipse cx="739.08" cy="10092.9" rx="937.023" ry="918.887" transform="rotate(-180 739.08 10092.9)" fill="#236D65"/>
-<ellipse cx="1004.34" cy="9989" rx="941.369" ry="1065.74" transform="rotate(-180 1004.34 9989)" fill="#237A72"/>
-<ellipse cx="1322.76" cy="9813.87" rx="941.369" ry="1065.74" transform="rotate(-180 1322.76 9813.87)" fill="#26867D"/>
-<ellipse cx="1513.81" cy="9555.95" rx="941.369" ry="1065.74" transform="rotate(-180 1513.81 9555.95)" fill="#268C82"/>
+<ellipse cx="-7.23505" cy="7603.82" rx="1561.69" ry="1531.46" transform="rotate(-104.641 -7.23505 7603.82)" fill="#236D65"/>
+<ellipse cx="272.138" cy="7987.77" rx="1568.93" ry="1776.21" transform="rotate(-104.641 272.138 7987.77)" fill="#237A72"/>
+<ellipse cx="688.676" cy="8427.45" rx="1568.93" ry="1776.21" transform="rotate(-104.641 688.676 8427.45)" fill="#26867D"/>
+<ellipse cx="1185.06" cy="8626.87" rx="1568.93" ry="1776.21" transform="rotate(-104.641 1185.06 8626.87)" fill="#268C82"/>
+<ellipse cx="1700.71" cy="4621.63" rx="2609.91" ry="2559.39" transform="rotate(-180 1700.71 4621.63)" fill="#236D65"/>
+<ellipse cx="2439.55" cy="4332.09" rx="2622.01" ry="2968.42" transform="rotate(-180 2439.55 4332.09)" fill="#237A72"/>
+<ellipse cx="3326.44" cy="3844.3" rx="2622.01" ry="2968.42" transform="rotate(-180 3326.44 3844.3)" fill="#26867D"/>
+<ellipse cx="3858.57" cy="3125.92" rx="2622.01" ry="2968.42" transform="rotate(-180 3858.57 3125.92)" fill="#268C82"/>
 </g>
 <defs>
 <clipPath id="clip0_1_2">
