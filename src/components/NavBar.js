@@ -55,7 +55,10 @@ export default function NavBar({ className = "" }) {
       )}
 
       {/* Desktop Nav */}
-      <div className="hidden sm:flex mx-auto max-w-5xl items-center space-x-8 justify-end">
+      <div
+        className="hidden sm:flex mx-auto max-w-5xl items-center
+       text-gray-200 space-x-8 justify-end font-semibold"
+      >
         <Link href="/" className="px-4 py-2 hover:text-green-400 transition">
           Home
         </Link>

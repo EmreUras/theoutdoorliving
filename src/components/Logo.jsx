@@ -12,7 +12,7 @@ export default function Logo() {
         h-20       /* 2.5rem on mobile */
         sm:h-14    /* 3.5rem on small (≥640px) */
         md:h-20    /* 5rem on medium (≥768px) */
-        lg:h-24    /* 6rem on large (≥1024px) */
+        lg:h-30    /* 6rem on large (≥1024px) */
         w-auto
       "
     />

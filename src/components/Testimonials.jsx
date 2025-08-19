@@ -1,108 +1,248 @@
 // src/components/Testimonials.jsx
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useMemo, useState } from "react";
+import { supabase } from "@/lib/supabase/browser";
+import toast from "react-hot-toast";
+import { HiStar } from "react-icons/hi";
+import { FiStar } from "react-icons/fi";
 
-const testimonials = [
+const seed = [
   {
-    text: "Their landscaping work helped us raise the property value significantly. Highly recommended.",
-    author: "Carlos M.",
-  },
-  {
-    text: "They transformed my messy lawn into something I’m proud to show off. Amazing work!",
+    text: "They transformed my messy lawn into something I’m proud of.",
     author: "Aisha K.",
+    rating: 5,
   },
   {
-    text: "I needed a quick cleanup before an open house. They delivered beyond expectations. Big thanks!",
-    author: "Mike D.",
-  },
-  {
-    text: "Professional, friendly, and efficient. My backyard looks completely new.",
+    text: "Professional, friendly, and efficient. Backyard looks new.",
     author: "Sandra L.",
+    rating: 5,
   },
   {
-    text: "Great communication, reliable team, and beautiful results. Couldn’t ask for more.",
+    text: "Great communication and beautiful results.",
     author: "Raj P.",
+    rating: 5,
   },
   {
-    text: "The team was punctual and detail-oriented. Loved the attention to every little plant!",
-    author: "Lena G.",
-  },
-  {
-    text: "The transformation was like night and day. My neighbors even asked for your contact info.",
-    author: "Derrick S.",
-  },
-  {
-    text: "Fantastic experience from start to finish. Easy to work with and very professional.",
-    author: "Marie V.",
-  },
-  {
-    text: "Really appreciated their fast turnaround and great quality. Will hire again.",
+    text: "Fast turnaround and great quality. Will hire again.",
     author: "Jason T.",
+    rating: 5,
   },
   {
-    text: "They listened to what we wanted and totally delivered. Amazing outdoor vibe now!",
+    text: "Listened to what we wanted and totally delivered!",
     author: "Tina R.",
+    rating: 5,
   },
 ];
 
+function Stars({ value, size = "h-5 w-5" }) {
+  return (
+    <div className="flex items-center justify-center gap-[2px]">
+      {Array.from({ length: 5 }).map((_, i) =>
+        i < value ? (
+          <HiStar key={i} className={`${size} text-amber-300/90`} />
+        ) : (
+          <FiStar key={i} className={`${size} text-amber-300/60`} />
+        )
+      )}
+    </div>
+  );
+}
+
+function StarInput({ value, onChange }) {
+  return (
+    <div className="flex items-center gap-1">
+      {Array.from({ length: 5 }).map((_, i) => {
+        const v = i + 1;
+        const filled = v <= value;
+        return (
+          <button
+            key={v}
+            type="button"
+            onClick={() => onChange(v)}
+            className="p-1 rounded hover:bg-white/5"
+            aria-label={`Rate ${v} star${v > 1 ? "s" : ""}`}
+          >
+            {filled ? (
+              <HiStar className="h-6 w-6 text-amber-300/90" />
+            ) : (
+              <FiStar className="h-6 w-6 text-amber-300/60" />
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function Testimonials() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [tab, setTab] = useState("read"); // read | write
+  const [loading, setLoading] = useState(true);
+  const [rows, setRows] = useState([]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-    }, 3000); // slower auto-advance
-    return () => clearInterval(interval);
-  }, []);
+  // form
+  const [name, setName] = useState("");
+  const [text, setText] = useState("");
+  const [rating, setRating] = useState(5);
+  const [submitting, setSubmitting] = useState(false);
 
-  const getStyle = (index) => {
-    const position =
-      (index - currentIndex + testimonials.length) % testimonials.length;
-    const center = Math.floor(testimonials.length / 2);
-    const distance = Math.min(
-      Math.abs(position - center),
-      Math.abs(position + testimonials.length - center),
-      Math.abs(position - testimonials.length - center)
-    );
-    const scale = 1 - distance * 0.1;
-    const opacity = 1 - distance * 0.25;
-    const translateX = (position - center) * 140;
-
-    return {
-      transform: `translateX(${translateX}%) scale(${scale})`,
-      opacity,
-      zIndex: 10 - distance,
-    };
+  const load = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("testimonials")
+      .select("id,name,text,rating,created_at")
+      .eq("approved", true)
+      .order("created_at", { ascending: false });
+    setLoading(false);
+    if (error) return toast.error(error.message);
+    setRows(data || []);
   };
 
+  useEffect(() => {
+    load();
+    const ch = supabase
+      .channel("ba-public-testimonials")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "testimonials" },
+        () => load()
+      )
+      .subscribe();
+    return () => supabase.removeChannel(ch);
+  }, []);
+
+  const display = useMemo(() => {
+    const mapped = rows.map((r) => ({
+      text: r.text,
+      author: r.name,
+      rating: r.rating,
+    }));
+    if (mapped.length >= 5) return mapped;
+    const need = 5 - mapped.length;
+    return [...mapped, ...seed.slice(0, need)];
+  }, [rows]);
+
+  async function submitReview(e) {
+    e.preventDefault();
+    if (!name.trim() || !text.trim())
+      return toast.error("Please add your name and a short review.");
+    setSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from("testimonials")
+        .insert([
+          { name: name.trim(), text: text.trim(), rating, approved: false },
+        ]);
+      if (error) throw error;
+      toast.success(
+        "Thanks! After admin confirmation your review will appear."
+      );
+      setName("");
+      setText("");
+      setRating(5);
+      setTab("read");
+    } catch (err) {
+      toast.error(err.message || "Could not submit review");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
-    <section className="py-20  text-white overflow-hidden">
+    <section className="py-16 text-white">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-5xl md:text-7xl font-anton text-center mb-16 text-gray-800 drop-shadow-lg">
+        {/* Tabs – neutral, no glow */}
+        <div className="flex items-center justify-center gap-3 mb-8">
+          <button
+            onClick={() => setTab("read")}
+            className={`px-4 py-2 rounded-lg border text-sm md:text-base ${
+              tab === "read"
+                ? "border-white/15 bg-white/[0.04] text-slate-200"
+                : "border-white/10 text-slate-300 hover:bg-white/[0.04]"
+            }`}
+          >
+            What Our Clients Say
+          </button>
+          <button
+            onClick={() => setTab("write")}
+            className={`px-4 py-2 rounded-lg border text-sm md:text-base ${
+              tab === "write"
+                ? "border-white/15 bg-white/[0.04] text-slate-200"
+                : "border-white/10 text-slate-300 hover:bg-white/[0.04]"
+            }`}
+          >
+            Share Your Review
+          </button>
+        </div>
+
+        {/* Title – plain, no gradient/shadow */}
+        <h2 className="text-3xl md:text-4xl font-anton text-center text-slate-200 mb-10">
           What Our Clients Say
         </h2>
-        <div className="relative w-full flex justify-center items-center">
-          <div className="relative h-64 w-full flex items-center justify-center ">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                className="absolute w-60 md:w-72 h-auto p-4 bg-white
-                 text-black rounded-xl shadow-xl transition-all duration-700 
-                 ease-in-out text-center font-sans"
-                style={getStyle(index)}
+
+        {tab === "read" ? (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {display.map((t, i) => (
+              <div
+                key={i}
+                className="rounded-lg border border-white/10 bg-white/[0.035] p-5"
               >
-                <p className="text-sm md:text-base mb-4">
-                  “{testimonial.text}”
+                <div className="flex items-center justify-center mb-3">
+                  <Stars value={t.rating ?? 5} />
+                </div>
+                <p className="text-slate-200/90 text-center leading-relaxed">
+                  “{t.text}”
                 </p>
-                <p className="text-xs md:text-sm font-bold text-cyan-700">
-                  {testimonial.author}
+                <p className="mt-3 text-center text-sm font-semibold text-slate-300">
+                  {t.author}
                 </p>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </div>
+        ) : (
+          <div className="max-w-xl mx-auto rounded-lg border border-white/10 bg-white/[0.035] p-6">
+            <h3 className="text-xl md:text-2xl font-medium text-slate-200 text-center mb-4">
+              Share your experience
+            </h3>
+            <form onSubmit={submitReview} className="space-y-4">
+              <div className="flex items-center justify-center">
+                <StarInput value={rating} onChange={setRating} />
+              </div>
+
+              <label className="block">
+                <span className="text-sm text-slate-300">Your name</span>
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="mt-1 w-full rounded-md bg-black/30 border border-white/10 px-3 py-2 text-slate-200 outline-none"
+                  placeholder="John D."
+                />
+              </label>
+
+              <label className="block">
+                <span className="text-sm text-slate-300">Your review</span>
+                <textarea
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  rows={4}
+                  className="mt-1 w-full rounded-md bg-black/30 border border-white/10 px-3 py-2 text-slate-200 outline-none"
+                  placeholder="Tell others what you liked!"
+                />
+              </label>
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full rounded-md px-4 py-2 bg-slate-200 text-black font-semibold disabled:opacity-60"
+              >
+                {submitting ? "Sending…" : "Send review"}
+              </button>
+              <p className="text-xs text-center text-slate-400">
+                Your review will appear after admin confirmation.
+              </p>
+            </form>
+          </div>
+        )}
       </div>
     </section>
   );
