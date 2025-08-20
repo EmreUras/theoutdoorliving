@@ -2,7 +2,22 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import {
+  FiChevronDown,
+  FiScissors,
+  FiTrash2,
+  FiDroplet,
+  FiCrop,
+  FiFeather,
+  FiRefreshCw,
+  FiTool,
+  FiGrid,
+  FiLayers,
+  FiMinus,
+  FiCheckSquare,
+} from "react-icons/fi";
 
+/* ---------- DATA (unchanged) ---------- */
 const SERVICES = [
   {
     title: "Property Maintenance & Lawn Cutting/Trimming",
@@ -61,91 +76,126 @@ const SERVICES = [
   },
 ];
 
+/* Nice visual icons to pair with each row */
+const ICONS = [
+  FiScissors,
+  FiTrash2,
+  FiDroplet,
+  FiCrop,
+  FiFeather,
+  FiRefreshCw,
+  FiTool,
+  FiGrid,
+  FiLayers,
+  FiMinus,
+  FiCheckSquare,
+];
+
 export default function ServicesAccordion() {
   const [openIndex, setOpenIndex] = useState(null);
+  const toggle = (i) => setOpenIndex((prev) => (prev === i ? null : i));
 
-  const toggle = (i) => {
-    setOpenIndex(openIndex === i ? null : i);
-  };
-
-  const ease = [0.25, 0.1, 0.25, 1]; // smooth
+  const ease = [0.22, 0.03, 0.26, 1];
 
   return (
-    <section className="max-w-4xl mx-auto px-6 py-20">
-      <h1 className="text-5xl md:text-6xl font-anton text-center mb-16 text-gray-900">
-        Our Services
-      </h1>
+    <section className="relative mx-auto max-w-6xl px-6 py-24 overflow-hidden isolate">
+      {/* ambient glow */}
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-70">
+        <div className="absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-emerald-500/20 blur-3xl" />
+        <div className="absolute -bottom-24 right-10 h-56 w-56 rounded-full bg-cyan-500/20 blur-3xl" />
+      </div>
 
-      <div className="space-y-5">
+      {/* Heading */}
+      <div className="mb-14 text-center">
+        <p className="text-xs tracking-[0.25em] text-emerald-300/80">
+          WHAT WE DO
+        </p>
+        <h1 className="mt-2 bg-gradient-to-br from-emerald-200 via-teal-200 to-cyan-300 bg-clip-text text-4xl font-anton text-transparent md:text-6xl">
+          Our Services
+        </h1>
+        <div className="mx-auto mt-4 h-px w-28 bg-gradient-to-r from-transparent via-emerald-300/50 to-transparent" />
+        <p className="mx-auto mt-5 max-w-2xl text-sm text-emerald-50/70">
+          Full-stack care for lawns and landscapes — crafted with precision,
+          delivered with pride.
+        </p>
+      </div>
+
+      {/* List */}
+      <div className="space-y-4">
         {SERVICES.map((item, i) => {
           const isOpen = openIndex === i;
+          const Icon = ICONS[i % ICONS.length];
 
           return (
-            <div key={i} className="rounded-xl shadow-md overflow-hidden">
-              {/* Toggle Button */}
-              <motion.button
-                onClick={() => toggle(i)}
-                initial={false}
-                animate={{
-                  borderBottomLeftRadius: isOpen ? 0 : 12,
-                  borderBottomRightRadius: isOpen ? 0 : 12,
-                }}
-                transition={{ duration: 0.4, ease }}
-                className={`w-full flex items-center justify-between px-5 py-4 
-                  text-left font-semibold
-                   text-gray-900 bg-gradient-to-r from-green-200 via-blue-100 to-cyan-200 
-                   rounded-t-xl ${
-                     !isOpen ? "rounded-b-xl" : ""
-                   } hover:brightness-105 transition-all duration-300`}
-              >
-                <span>{item.title}</span>
-                <motion.span
-                  animate={{ rotate: isOpen ? 180 : 0 }}
-                  transition={{ duration: 0.4, ease }}
-                  className="text-2xl font-bold"
-                >
-                  {isOpen ? "−" : "+"}
-                </motion.span>
-              </motion.button>
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5, ease }}
+              className="relative"
+            >
+              {/* gradient frame */}
+              <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-emerald-400/25 via-teal-400/25 to-cyan-400/25 opacity-70 blur-sm" />
 
-              {/* Content Panel */}
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.div
-                    key="content"
-                    initial={{
-                      maxHeight: 0,
-                      opacity: 0,
-                      paddingTop: 0,
-                      paddingBottom: 0,
-                    }}
-                    animate={{
-                      maxHeight: 1000,
-                      opacity: 1,
-                      paddingTop: 16,
-                      paddingBottom: 16,
-                    }}
-                    exit={{
-                      maxHeight: 0,
-                      opacity: 0,
-                      paddingTop: 0,
-                      paddingBottom: 0,
-                    }}
-                    transition={{ duration: 0.5, ease }}
-                    className="overflow-hidden px-5
-                     bg-gray-700 text-gray-100 text-base leading-relaxed rounded-b-xl"
+              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0b1713]/70 backdrop-blur-xl">
+                {/* header */}
+                <button
+                  onClick={() => toggle(i)}
+                  onKeyDown={(e) =>
+                    (e.key === "Enter" || e.key === " ") && toggle(i)
+                  }
+                  aria-expanded={isOpen}
+                  aria-controls={`svc-panel-${i}`}
+                  className="group flex w-full items-center gap-4 px-5 py-4 text-left"
+                >
+                  {/* icon */}
+                  <span className="relative grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-emerald-300/40 group-hover:bg-white/10">
+                    <Icon className="h-5 w-5 text-emerald-300" />
+                    <span className="pointer-events-none absolute inset-0 rounded-xl bg-emerald-400/10 blur-md opacity-0 transition group-hover:opacity-100" />
+                  </span>
+
+                  <span className="flex-1 text-[15.5px] font-semibold text-emerald-50">
+                    {item.title}
+                  </span>
+
+                  <motion.span
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.35, ease }}
+                    className="rounded-md border border-white/10 p-2 text-emerald-200"
+                    aria-hidden
                   >
+                    <FiChevronDown className="h-5 w-5" />
+                  </motion.span>
+                </button>
+
+                {/* content */}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
                     <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1, duration: 0.3 }}
+                      id={`svc-panel-${i}`}
+                      key="content"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.45, ease }}
+                      className="overflow-hidden"
                     >
-                      {item.content}
+                      <div className="px-5 pb-5 pt-2">
+                        <motion.p
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.08, duration: 0.35 }}
+                          className="rounded-xl border border-white/5 bg-white/[0.03] p-4 leading-relaxed text-emerald-50/90"
+                        >
+                          {item.content}
+                        </motion.p>
+                      </div>
                     </motion.div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
           );
         })}
       </div>

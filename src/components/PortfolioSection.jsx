@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import BeforeAfterVideo from "./BeforeAfterVideo";
+import BeforeAfterVideo1 from "./BeforeAfterVideo1";
 import Fenton from "./Fenton";
 import GardenBedRestoration from "./GardenBedRestoration";
 import Milton from "./Milton";
@@ -34,7 +34,7 @@ export default function PortfolioSection() {
         <div className="space-y-1">
           {portfolioItems.map((item) => (
             <div key={item.id}>
-              <BeforeAfterVideo {...item.videoProps} />
+              <BeforeAfterVideo1 {...item.videoProps} />
 
               {/* Separator */}
               <div className="mt-16 mb-16 h-[2px] w-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />

@@ -16,7 +16,7 @@ const seed = [
   {
     text: "Professional, friendly, and efficient. Backyard looks new.",
     author: "Sandra L.",
-    rating: 5,
+    rating: 4,
   },
   {
     text: "Great communication and beautiful results.",
@@ -26,7 +26,7 @@ const seed = [
   {
     text: "Fast turnaround and great quality. Will hire again.",
     author: "Jason T.",
-    rating: 5,
+    rating: 4,
   },
   {
     text: "Listened to what we wanted and totally delivered!",

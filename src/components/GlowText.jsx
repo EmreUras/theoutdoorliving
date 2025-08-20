@@ -46,7 +46,7 @@ export default function GlowText({ children }) {
                 <motion.span
                   key={`${lineIndex}-${wordIndex}`}
                   className="inline-block mx-1 whitespace-nowrap
-                    text-[2rem] sm:text-[2rem] md:text-[4rem] lg:text-[5rem] xl:text-[5.5rem]"
+                    text-[3rem] sm:text-[3rem] md:text-[4rem] lg:text-[5rem] xl:text-[5.5rem]"
                   variants={wordVariants}
                   initial="hidden"
                   animate="visible"
