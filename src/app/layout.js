@@ -32,8 +32,10 @@ export default function RootLayout({ children }) {
         {/* ====== Site Content ====== */}
         <div className="relative z-10">
           <header className="w-full py-4 px-6 flex flex-col items-center sm:flex-row sm:justify-between sm:items-center gap-4 bg-transparent">
-            <Logo />
-            <NavBar className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-6 mt-4 sm:mt-0 text-emerald-50" />
+            <NavBar
+              className="flex flex-col space-y-2 sm:flex-row 
+            sm:space-y-0 sm:space-x-6 mt-4 sm:mt-0 lg:mt-5 text-emerald-50"
+            />
           </header>
 
           <main className="relative">{children}</main>

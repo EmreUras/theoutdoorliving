@@ -67,7 +67,7 @@ const SERVICES = [
 // filenames in /public/services (from your screenshots)
 const FILE_BY_ID = {
   1: "Property Maintenance & Lawn CuttingTrimming.jpg",
-  2: "litter pick-up.jpg",
+  2: "Litter Pick-Up.jpg",
   3: "Fertilization & Weed Control.jpg",
   4: "Pruning  Removal of Trees, Bushes & Shrubs.jpg",
   5: "Planting.jpg",

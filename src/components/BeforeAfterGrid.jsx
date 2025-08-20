@@ -34,7 +34,6 @@ export default function BeforeAfterGrid() {
       );
     })();
 
-    // realtime refresh
     const ch = supabase
       .channel("ba-public")
       .on(
@@ -52,26 +51,38 @@ export default function BeforeAfterGrid() {
   }, []);
 
   if (loading) return null;
-
-  if (!projects.length) {
+  if (!projects.length)
     return <div className="text-emerald-50/70">No projects yet.</div>;
-  }
 
   return (
     <section className="py-16">
-      <div className="mx-auto max-w-6xl space-y-12">
+      <div className="mx-auto max-w-6xl space-y-14">
         {projects.map((p) => (
           <article
             key={p.id}
             className="
-              relative rounded-3xl border border-white/10 bg-white/5
-              ring-1 ring-emerald-400/20 shadow-[0_0_60px_rgba(16,185,129,0.18)]
-              hover:shadow-[0_0_90px_rgba(16,185,129,0.28)] transition-shadow
-              p-6 md:p-8
+              relative rounded-3xl  bg-black/25
+        
+              p-6 md:p-10
             "
           >
-            {/* IMAGES ON TOP */}
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {/* TITLE */}
+            {(p.title || p.featured) && (
+              <header className="text-center mb-6 md:mb-8">
+                {p.title && (
+                  <h2
+                    className="text-3xl md:text-4xl font-anton tracking-wide bg-gradient-to-br
+                   from-emerald-200 via-teal-200 to-cyan-300 bg-clip-text text-transparent"
+                  >
+                    {p.title}
+                  </h2>
+                )}
+                <div className="mx-auto mt-3 h-px w-24 bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
+              </header>
+            )}
+
+            {/* GRID — images first, then paragraph that spans all columns */}
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {p.pairs.map((pair) => (
                 <BeforeAfterCard
                   key={pair.id}
@@ -79,19 +90,33 @@ export default function BeforeAfterGrid() {
                   afterUrl={pair.after_url}
                 />
               ))}
-            </div>
 
-            {/* TEXT UNDER — CENTERED */}
-            <div className="mt-8 text-center bg-black/20 p-5 rounded-2xl">
-              {p.title && (
-                <h2 className="text-3xl font-anton mb-2 bg-gradient-to-br from-emerald-300 to-cyan-300 bg-clip-text text-transparent">
-                  {p.title}
-                </h2>
-              )}
+              {/* PARAGRAPH spans full grid width so it's aligned with images */}
               {p.description && (
-                <p className="mx-auto max-w-3xl text-emerald-50/80 ">
-                  {p.description}
-                </p>
+                <div className="sm:col-span-2 lg:col-span-3">
+                  <div
+                    className="
+                      rounded-2xl border border-white/10 bg-[#0b1713]/40
+                      p-5 md:p-7 relative
+                      shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]
+                      before:absolute before:inset-x-5 before:top-2 before:h-px
+                      before:bg-gradient-to-r before:from-transparent before:via-emerald-300/20 before:to-transparent
+                      after:absolute after:inset-x-5 after:bottom-2 after:h-px
+                      after:bg-gradient-to-r after:from-transparent after:via-emerald-300/20 after:to-transparent
+                    "
+                  >
+                    <p
+                      className="
+                        text-[16px] md:text-[17px] leading-8 text-emerald-50/90 antialiased
+                        first-letter:text-5xl first-letter:font-anton first-letter:leading-[0.8]
+                        first-letter:float-left first-letter:mr-3 first-letter:mt-1
+                        first-letter:text-emerald-200
+                      "
+                    >
+                      {p.description}
+                    </p>
+                  </div>
+                </div>
               )}
             </div>
 

@@ -19,29 +19,74 @@ export default function BeforeAfterCard({
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
+  const current = showAfter ? afterUrl : beforeUrl;
+  const currentLabel = showAfter ? afterLabel : beforeLabel;
+
   return (
     <>
       {/* Image card */}
-      <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/20">
+      <figure
+        className="
+          group relative overflow-hidden rounded-2xl
+          border border-white/12 bg-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]
+          ring-1 ring-emerald-400/10
+          transition
+        "
+      >
         <img
-          src={showAfter ? afterUrl : beforeUrl}
+          src={current}
+          alt={currentLabel}
           onClick={() => setShowAfter((v) => !v)}
-          className="w-full h-64 object-cover cursor-pointer select-none"
-          alt={showAfter ? afterLabel : beforeLabel}
+          className="
+            w-full h-64 object-cover select-none cursor-pointer
+            transition-transform duration-500 group-hover:scale-[1.02]
+          "
+          loading="lazy"
         />
-        <span className="absolute bottom-2 left-2 text-xs bg-black/60 text-white rounded px-2 py-1">
-          {showAfter ? afterLabel : beforeLabel}
-        </span>
 
+        {/* soft vignette */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35
+         via-transparent to-black/10"
+        />
+
+        {/* label chip */}
+        <figcaption
+          className="
+            absolute left-3 top-3 text-[11px] uppercase tracking-wide
+            bg-black/55 backdrop-blur-sm text-emerald-100
+            px-2.5 py-1 rounded-md border border-white/10
+            shadow-[0_0_0_1px_rgba(255,255,255,0.03)]
+          "
+        >
+          {currentLabel}
+        </figcaption>
+
+        {/* zoom */}
         <button
           onClick={() => setOpen(true)}
-          className="absolute top-2 right-2 p-2 rounded-full bg-black/50 text-white hover:bg-black/70"
-          aria-label="View larger"
           title="View larger"
+          aria-label="View larger"
+          className="
+            absolute right-2 top-2 p-2 rounded-full
+            bg-black/50 text-white hover:bg-black/70
+            border border-white/10
+          "
         >
-          <FiMaximize2 />
+          <FiMaximize2 className="h-4 w-4" />
         </button>
-      </div>
+
+        {/* hint */}
+        <span
+          className="
+            absolute bottom-2 left-1/2 -translate-x-1/2 text-[11px]
+            rounded-full px-2.5 py-1 bg-black/45 text-white/90 border border-white/10
+            opacity-0 group-hover:opacity-100 transition
+          "
+        >
+          Click to toggle
+        </span>
+      </figure>
 
       {/* Fullscreen viewer (fixed & safe on mobile) */}
       {open && (
@@ -49,30 +94,27 @@ export default function BeforeAfterCard({
           className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm"
           onClick={() => setOpen(false)} // click backdrop to close
         >
-          {/* Close button fixed to viewport so it's ALWAYS visible */}
+          {/* Close (always reachable) */}
           <button
             onClick={() => setOpen(false)}
             aria-label="Close"
-            className="fixed top-3 right-3 z-[110] p-3 rounded-full bg-white/10 text-white hover:bg-white/20"
+            className="fixed top-3 right-3 z-[110] p-3 rounded-full bg-white/10 text-white hover:bg-white/20 border border-white/15"
           >
             <FiX className="h-5 w-5" />
           </button>
 
-          {/* Scrollable content area; clicking inside shouldn't close */}
+          {/* Scrollable content; stop propagation */}
           <div
             className="h-full w-full overflow-auto p-4 md:p-8"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mx-auto max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
               {/* BEFORE */}
-              <figure className="relative rounded-2xl border border-white/10 bg-black/20 p-2">
+              <figure className="relative rounded-2xl border border-white/12 bg-black/25 p-2">
                 <img
                   src={beforeUrl}
                   alt={beforeLabel}
-                  className="
-                    w-full h-auto object-contain rounded-xl
-                    max-h-[70vh] md:max-h-[82vh]
-                  "
+                  className="w-full h-auto object-contain rounded-xl max-h-[70vh] md:max-h-[82vh]"
                   loading="lazy"
                 />
                 <figcaption className="absolute bottom-3 left-3 text-xs bg-black/60 text-white rounded px-2 py-1">
@@ -81,14 +123,11 @@ export default function BeforeAfterCard({
               </figure>
 
               {/* AFTER */}
-              <figure className="relative rounded-2xl border border-white/10 bg-black/20 p-2">
+              <figure className="relative rounded-2xl border border-white/12 bg-black/25 p-2">
                 <img
                   src={afterUrl}
                   alt={afterLabel}
-                  className="
-                    w-full h-auto object-contain rounded-xl
-                    max-h-[70vh] md:max-h-[82vh]
-                  "
+                  className="w-full h-auto object-contain rounded-xl max-h-[70vh] md:max-h-[82vh]"
                   loading="lazy"
                 />
                 <figcaption className="absolute bottom-3 left-3 text-xs bg-black/60 text-white rounded px-2 py-1">
