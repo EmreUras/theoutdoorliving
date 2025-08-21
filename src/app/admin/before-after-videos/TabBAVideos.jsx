@@ -344,7 +344,7 @@ export default function TabBAVideos({ pushNotice }) {
                     </label>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <button
                       onClick={() => handleUpdate(r)}
                       className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-3 py-2 text-emerald-100 hover:bg-white/5"
@@ -353,7 +353,8 @@ export default function TabBAVideos({ pushNotice }) {
                     </button>
                     <button
                       onClick={() => setConfirm(r.id)}
-                      className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-3 py-2 text-red-300 hover:bg-white/5"
+                      className="inline-flex items-center gap-1 rounded-lg border
+                       border-white/15 px-1 py-2 text-red-300 hover:bg-white/5"
                     >
                       <FiTrash2 /> Delete
                     </button>

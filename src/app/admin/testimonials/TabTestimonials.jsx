@@ -110,7 +110,7 @@ export default function TabTestimonials({ pushNotice }) {
               key={r.id}
               className="rounded-xl border border-white/10 p-4 bg-black/25"
             >
-              <div className="flex items-start gap-4">
+              <div className="flex items-start flex-col gap-4">
                 <div className="flex-shrink-0">
                   <div className="flex">
                     {Array.from({ length: 5 }).map((_, i) => (

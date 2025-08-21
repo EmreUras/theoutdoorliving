@@ -498,7 +498,7 @@ export default function AdminDashboard() {
   if (!session) return null;
 
   return (
-    <section className="py-20 px-4 sm:px-6 md:px-16">
+    <section className="py-20 px-4 sm:px-6 md:px-16 mt-10">
       <div className="mx-auto max-w-6xl">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">

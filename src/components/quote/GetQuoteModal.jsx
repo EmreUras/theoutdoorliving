@@ -131,19 +131,26 @@ export default function GetQuoteModal({ open, onClose }) {
   };
 
   // ---- submit to Supabase (quotes + storage + quote_media) ----
+  // ---- submit to Supabase (quotes + storage + quote_media) ----
   const submitToSupabase = async () => {
     if (submitting) return;
     if (!validateStep1()) {
       toast.error("Please fix the highlighted fields.");
       return;
     }
+
     try {
       setSubmitting(true);
 
-      // 1) create the quote
-      const { data: quote, error: qErr } = await supabase
-        .from("quotes")
-        .insert({
+      const id =
+        typeof crypto !== "undefined" && crypto.randomUUID
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
+      console.log("[quotes] inserting…", { id });
+      const { error: qErr } = await supabase.from("quotes").insert(
+        {
+          id,
           name: form.name.trim(),
           email: form.email.trim(),
           phone: form.phone?.trim() || null,
@@ -153,44 +160,66 @@ export default function GetQuoteModal({ open, onClose }) {
           description: form.description.trim(),
           contact_pref: form.contact_pref,
           status: "new",
-        })
-        .select("*")
-        .single();
+        },
+        { returning: "minimal" }
+      );
 
-      if (qErr) throw qErr;
+      if (qErr) {
+        console.error("[quotes] insert error:", qErr);
+        throw qErr;
+      }
+      console.log("[quotes] inserted OK", id);
 
-      // 2) upload media (optional)
+      // ---- uploads
       const bucket = supabase.storage.from("quote-media");
       const mediaRows = [];
+
       for (let i = 0; i < media.length; i++) {
         const m = media[i];
         const cleanName = m.file.name.replace(/[^\w.\-]+/g, "_");
-        const path = `quotes/${quote.id}/${Date.now()}_${i}_${cleanName}`;
+        const path = `quotes/${id}/${Date.now()}_${i}_${cleanName}`;
+
+        console.log(
+          "[storage] upload starting:",
+          path,
+          m.file.type,
+          m.file.size
+        );
         const { error: uErr } = await bucket.upload(path, m.file, {
           upsert: false,
           cacheControl: "3600",
+          contentType: m.file.type || undefined, // helps videos
         });
-        if (uErr) throw uErr;
-        mediaRows.push({
-          quote_id: quote.id,
-          kind: m.kind,
-          path,
-          sort_order: i,
-        });
+        if (uErr) {
+          console.error("[storage] upload failed:", path, uErr);
+          throw uErr;
+        }
+        console.log("[storage] upload OK:", path);
+
+        mediaRows.push({ quote_id: id, kind: m.kind, path, sort_order: i });
       }
 
       if (mediaRows.length) {
+        console.log("[quote_media] inserting rows…", mediaRows.length);
         const { error: mErr } = await supabase
           .from("quote_media")
-          .insert(mediaRows);
-        if (mErr) throw mErr;
+          .insert(mediaRows, { returning: "minimal" });
+        if (mErr) {
+          console.error("[quote_media] insert error:", mErr);
+          throw mErr;
+        }
+        console.log("[quote_media] insert OK");
       }
 
       toast.success("Quote request sent. We’ll get back to you soon!");
       hardClose();
     } catch (err) {
-      console.error(err);
-      toast.error("Could not send your quote. Please try again.");
+      console.error("[submit] failed:", err);
+      toast.error(
+        typeof err?.message === "string"
+          ? err.message
+          : "Could not send your quote. Please try again."
+      );
     } finally {
       setSubmitting(false);
     }

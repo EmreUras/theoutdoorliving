@@ -350,14 +350,14 @@ export default function BAEditor({ pushNotice }) {
           key={p.id}
           className="rounded-2xl border border-white/10 bg-black/20 p-5"
         >
-          <div className="flex items-center justify-between">
-            <div className="text-emerald-50/70 text-sm px-2 py-1 bg-white/5 rounded-lg">
+          <div className="flex items-center justify-between gap-2">
+            <div className="text-emerald-50/70 text-sm px-2 text-center py-1 bg-white/5 rounded-lg">
               {p.title || "Untitled"}
             </div>
             <div className="flex items-center gap-2">
               <button
                 onClick={(e) => askDelete(p.id, e.currentTarget)}
-                className="rounded-lg border border-red-400/25 px-3 py-2 text-red-300 hover:bg-red-500/10 flex items-center gap-2"
+                className="rounded-lg border border-red-400/25 px-2 py-2 text-red-300 hover:bg-red-500/10 flex items-center gap-2"
                 title="Delete project"
               >
                 <FiTrash2 /> Delete
