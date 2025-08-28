@@ -2,7 +2,7 @@
 "use client";
 
 import React from "react";
-import AnimationGroup from "./AnimationGroup";
+
 import GlowText from "./GlowText";
 
 export default function HeroSection() {
@@ -23,9 +23,6 @@ export default function HeroSection() {
           Greener Than Your Budget
         </GlowText>
       </h1>
-
-      {/* Animations */}
-      <AnimationGroup />
     </section>
   );
 }

@@ -1,186 +1,502 @@
-// src/components/ServicesDemo.jsx  (or ServicesShowcase.jsx)
+// src/components/ServicesShowcase.jsx
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { FaLeaf } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  FiMaximize2,
+  FiX,
+  FiChevronLeft,
+  FiChevronRight,
+} from "react-icons/fi";
 
+/* =========================== CONTENT =========================== */
 const SERVICES = [
   {
-    id: 1,
-    title: "Property Maintenance & Lawn Cutting/Trimming",
-    desc: "Consistent mowing, edging, and cleanup that keeps your lawn crisp week after week. We manage clippings, trim borders, and shape edges so your yard looks freshly detailed—not just cut.",
+    id: "cwr",
+    title: "Construction Waste Removal",
+    blurb:
+      "Selective demo or full tear-downs—done safely. We use dust control, protect anything you want to keep, and remove all debris. For contractors & DIY: stack leftovers and we’ll pick them up—often cheaper than renting a bin.",
+    type: "beforeAfter",
+    imgs: {
+      before: "/what_we_do/construction_waste_removal/before.jpg",
+      after: "/what_we_do/construction_waste_removal/after.jpg",
+    },
   },
   {
-    id: 2,
-    title: "Litter Pick-Up",
-    desc: "Routine grounds policing for a spotless property. We collect and remove litter, wind-blown debris, and small dumping so your site stays welcoming and professional every single day.",
+    id: "deck",
+    title: "Deck Removal",
+    blurb:
+      "Clean dismantle and removal. Want to keep certain boards or hardware? Say the word—we’ll save them neatly.",
+    type: "gallery",
+    imgs: ["/what_we_do/deck_removal/1.jpg", "/what_we_do/deck_removal/2.jpg"],
   },
   {
-    id: 3,
-    title: "Fertilization & Weed Control",
-    desc: "Balanced nutrients and targeted treatments that grow thicker turf while pushing out broadleaf weeds. Fewer bare spots, deeper color, and healthier roots throughout the season.",
+    id: "sod",
+    title: "Grass Removal & New Sod",
+    blurb:
+      "Out with the tired turf—new soil, fertilizer, and sod installed the right way. Includes a simple 2-week watering plan and a 1-year warranty: if it dies under normal care, we replace it.",
+    type: "gallery",
+    imgs: [
+      "/what_we_do/grass_install/1.jpg",
+      "/what_we_do/grass_install/2.jpg",
+      "/what_we_do/grass_install/3.jpg",
+    ],
   },
   {
-    id: 4,
-    title: "Pruning / Removal of Trees, Bushes & Shrubs",
-    desc: "Safety-focused removals and smart pruning to improve plant health and sightlines. We thin, shape, and clear deadwood so your greenery thrives and your property feels open and clean.",
+    id: "sideyard",
+    title: "Side-Yard Makeovers",
+    blurb:
+      "Turn narrow side paths into welcoming walkways with colourful stone and a clean stepping-stone rhythm to the backyard.",
+    type: "hero",
+    imgs: ["/what_we_do/house_view/1.jpg"],
   },
   {
-    id: 5,
-    title: "Planting",
-    desc: "Seasonal flowers, shrubs, and trees installed with proper soil prep and spacing. We pick hardy, low-maintenance varieties that match your light conditions and design style.",
+    id: "household",
+    title: "Single Items & Household Goods",
+    blurb:
+      "One bulky item or a few small goods—we’ll remove them. Reusable items are donated to the local Salvation Army so nothing goes to waste.",
+    type: "masonry",
+    imgs: [
+      "/what_we_do/household_items/1.jpg",
+      "/what_we_do/household_items/2.jpg",
+      "/what_we_do/household_items/3.jpg",
+      "/what_we_do/household_items/4.jpg",
+      "/what_we_do/household_items/5.jpg",
+    ],
   },
   {
-    id: 6,
-    title: "Fall / Spring Clean-Up",
-    desc: "Leaf removal, bed cleaning, and first-cut/last-cut services to reset the property at the start and end of each season. Ready for snow… and ready for summer.",
+    id: "overgrown",
+    title: "Overgrown Area Reclaim",
+    blurb:
+      "Brush, weeds, seedlings, high grass, stumps, and ground debris—cleared and prepped for new sod or beds. Example: a full rebalance along Erin Mills Parkway.",
+    type: "gallery",
+    imgs: [
+      "/what_we_do/overgrown_area/weed1.jpg",
+      "/what_we_do/overgrown_area/weed2.jpg",
+      "/what_we_do/overgrown_area/clean-up.jpg",
+    ],
   },
   {
-    id: 7,
-    title: "Excavation",
-    desc: "Precise dig work for grading, trenching, and base prep. We create stable subgrades, improve drainage, and set the stage for patios, pathways, and structures.",
+    id: "stone",
+    title: "Simple Stone Work",
+    blurb:
+      "Budget-friendly patio-stone walkways with better base prep and cleaner layouts—so they look sharp and last.",
+    type: "spotlight",
+    imgs: ["/what_we_do/simple_stone_work/stone.jpg"],
   },
   {
-    id: 8,
-    title: "Interlock Installation",
-    desc: "Durable, level, and perfectly aligned pavers for driveways, patios, and walkways. Proper base depth and compaction means your surface stays flat and beautiful for years.",
-  },
-  {
-    id: 9,
-    title: "Retaining Walls",
-    desc: "Engineered walls that hold grade, tame slopes, and frame garden beds. Quality block and drainage ensure long-term stability with a clean, modern look.",
-  },
-  {
-    id: 10,
-    title: "Curbs & Garden Edging",
-    desc: "Crisp concrete or stone borders that keep mulch in place and grass out of beds. Cleaner lines, easier mowing, and a sharper overall presentation.",
-  },
-  {
-    id: 11,
-    title: "Sod Removal / Installation",
-    desc: "Out with the tired turf, in with lush new sod. Fresh soil prep, rolling, and watering guidance deliver an instant lawn that roots fast and stays vibrant.",
+    id: "trees",
+    title: "Tree Removal",
+    blurb:
+      "Any size, any season. Safe takedown, clean site. Example shown: winter removal in Mississauga.",
+    type: "grid",
+    imgs: [
+      "/what_we_do/tree_removal/1.jpg",
+      "/what_we_do/tree_removal/2.jpg",
+      "/what_we_do/tree_removal/3.jpg",
+      "/what_we_do/tree_removal/4.jpg",
+    ],
   },
 ];
 
-// filenames in /public/services (from your screenshots)
-const FILE_BY_ID = {
-  1: "Property Maintenance & Lawn CuttingTrimming.jpg",
-  2: "Litter Pick-Up.jpg",
-  3: "Fertilization & Weed Control.jpg",
-  4: "Pruning  Removal of Trees, Bushes & Shrubs.jpg",
-  5: "Planting.jpg",
-  6: "Fall  Spring Clean-Up.jpg",
-  7: "Excavation.jpg",
-  8: "Interlock Installation.jpg",
-  9: "Retaining Walls.jpg",
-  10: "Curbs & Garden Edging.jpg",
-  11: "Sod Removal  Installation.jpg",
-};
-
-export default function ServicesDemo() {
-  // desktop vs mobile (hover vs tap)
-  const [isDesktop, setIsDesktop] = useState(false);
+/* ========================== LIGHTBOX =========================== */
+function useKey(fn) {
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    const sync = () => setIsDesktop(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
-  const [activeId, setActiveId] = useState(null);
-  const onCardClick = (id) => {
-    if (isDesktop) return; // desktop = hover only
-    setActiveId((cur) => (cur === id ? null : id)); // tap toggle on mobile
+    const h = (e) => fn(e);
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [fn]);
+}
+
+function Lightbox({ open, images, index, onClose, setIndex }) {
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  useKey((e) => {
+    if (!open) return;
+    if (e.key === "Escape") onClose();
+    if (e.key === "ArrowLeft") setIndex((i) => Math.max(0, i - 1));
+    if (e.key === "ArrowRight")
+      setIndex((i) => Math.min(images.length - 1, i + 1));
+  });
+
+  if (!open) return null;
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        key="lb"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[90] bg-black/80 backdrop-blur-sm"
+        onClick={onClose}
+      >
+        <div
+          className="absolute left-1/2 top-1/2 z-[95] w-[92vw] max-w-6xl -translate-x-1/2 -translate-y-1/2"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="relative h-[78vh] w-full overflow-hidden rounded-2xl border border-white/15 bg-[#0b1713]">
+            <Image
+              src={images[index]}
+              alt="Preview"
+              fill
+              className="object-contain"
+              sizes="100vw"
+              priority
+            />
+            {/* Close */}
+            <button
+              onClick={onClose}
+              className="absolute right-3 top-3 rounded-full border border-white/20 bg-black/40 p-2 text-white/90 backdrop-blur hover:bg-black/60"
+              aria-label="Close"
+            >
+              <FiX className="text-xl" />
+            </button>
+            {/* Nav */}
+            {index > 0 && (
+              <button
+                onClick={() => setIndex((i) => Math.max(0, i - 1))}
+                className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-black/40 p-3 text-white/90 backdrop-blur hover:bg-black/60"
+                aria-label="Previous image"
+              >
+                <FiChevronLeft className="text-2xl" />
+              </button>
+            )}
+            {index < images.length - 1 && (
+              <button
+                onClick={() =>
+                  setIndex((i) => Math.min(images.length - 1, i + 1))
+                }
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-black/40 p-3 text-white/90 backdrop-blur hover:bg-black/60"
+                aria-label="Next image"
+              >
+                <FiChevronRight className="text-2xl" />
+              </button>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+/* ======================== IMAGE TILE (ZOOM) ======================== */
+function ImageTile({
+  src,
+  alt,
+  onOpen,
+  h = "h-[300px] md:h-[340px] lg:h-[380px]",
+}) {
+  return (
+    <div
+      className={`group relative w-full overflow-hidden rounded-2xl border border-white/10 bg-[#0d1a16] ${h}`}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-contain"
+        sizes="100vw"
+      />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background:
+            "radial-gradient(240px 120px at 50% -10%, rgba(255,255,255,.10), transparent 60%)",
+        }}
+      />
+      <button
+        onClick={onOpen}
+        className="absolute right-3 top-3 rounded-xl border border-white/25 bg-black/40 p-2 text-white/90 backdrop-blur transition hover:bg-black/60"
+        aria-label="View larger"
+      >
+        <FiMaximize2 className="text-lg" />
+      </button>
+    </div>
+  );
+}
+
+/* ======================== BEFORE/AFTER (zoom) ======================== */
+function BeforeAfter({ beforeSrc, afterSrc, onOpen }) {
+  const ref = useRef(null);
+  const [x, setX] = useState(55);
+  const down = useRef(false);
+
+  const setFrom = (clientX) => {
+    const rect = ref.current.getBoundingClientRect();
+    setX(
+      Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100))
+    );
   };
 
   return (
-    <section className="relative w-full py-24 md:py-28">
+    <div
+      ref={ref}
+      className="relative h-[320px] md:h-[360px] lg:h-[400px] w-full overflow-hidden rounded-2xl border border-white/12 bg-[#0d1a16]"
+      onMouseDown={(e) => {
+        down.current = true;
+        setFrom(e.clientX);
+      }}
+      onMouseMove={(e) => down.current && setFrom(e.clientX)}
+      onMouseUp={() => (down.current = false)}
+      onMouseLeave={() => (down.current = false)}
+      onTouchStart={(e) => setFrom(e.touches[0].clientX)}
+      onTouchMove={(e) => setFrom(e.touches[0].clientX)}
+    >
+      {/* After base */}
+      <Image
+        src={afterSrc}
+        alt="After"
+        fill
+        className="object-contain"
+        sizes="100vw"
+        priority
+      />
+      {/* Before clipped */}
+      <div
+        className="absolute inset-0 overflow-hidden"
+        style={{ width: `${x}%` }}
+      >
+        <Image
+          src={beforeSrc}
+          alt="Before"
+          fill
+          className="object-contain"
+          sizes="100vw"
+          priority
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
+      </div>
+      {/* Handle */}
+      <div
+        className="absolute top-0 h-full w-[2px] bg-white/70"
+        style={{ left: `calc(${x}% - 1px)` }}
+      />
+      <div
+        className="absolute top-1/2 -translate-y-1/2"
+        style={{ left: `calc(${x}% - 20px)` }}
+      >
+        <div className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-white/80 backdrop-blur">
+          Drag
+        </div>
+      </div>
+      {/* Labels */}
+      <span className="absolute left-3 top-3 rounded bg-black/60 px-2 py-1 text-xs text-emerald-200">
+        Before
+      </span>
+      <span className="absolute right-3 top-3 rounded bg-black/60 px-2 py-1 text-xs text-emerald-200">
+        After
+      </span>
+      {/* Zoom */}
+      <button
+        onClick={onOpen}
+        className="absolute right-3 bottom-3 rounded-xl border border-white/25 bg-black/40 p-2 text-white/90 backdrop-blur transition hover:bg-black/60"
+        aria-label="View larger"
+      >
+        <FiMaximize2 className="text-lg" />
+      </button>
+    </div>
+  );
+}
+
+/* ========================== TYPOGRAPHY PIECES ========================== */
+const Title = ({ children }) => (
+  <h3 className="text-[22px] sm:text-2xl md:text-3xl font-extrabold tracking-tight">
+    <span className="bg-gradient-to-br from-emerald-200 via-teal-200 to-cyan-200 bg-clip-text text-transparent">
+      {children}
+    </span>
+  </h3>
+);
+const Body = ({ children }) => (
+  <p className="text-[15px] md:text-base leading-relaxed text-emerald-50/90">
+    {children}
+  </p>
+);
+
+/* =============================== MAIN =============================== */
+export default function ServicesShowcase() {
+  const [active, setActive] = useState(SERVICES[0].id);
+  const current = useMemo(
+    () => SERVICES.find((s) => s.id === active),
+    [active]
+  );
+
+  // Lightbox state
+  const [lbOpen, setLbOpen] = useState(false);
+  const [lbImages, setLbImages] = useState([]);
+  const [lbIndex, setLbIndex] = useState(0);
+
+  const openLightbox = (images, index = 0) => {
+    setLbImages(images);
+    setLbIndex(index);
+    setLbOpen(true);
+  };
+
+  return (
+    <section id="what-we-do" className="relative w-full py-18 md:py-24">
       {/* Heading */}
-      <div className="px-6 md:px-16">
-        <h2 className="text-center font-anton text-5xl md:text-7xl tracking-tight">
-          <span className="bg-gradient-to-br from-emerald-300 via-teal-200 to-cyan-300 bg-clip-text text-transparent drop-shadow-[0_2px_20px_rgba(16,185,129,.25)]">
+      <div className="px-6 md:px-10 text-center">
+        <h2 className="text-5xl md:text-7xl font-black tracking-tight">
+          <span className="bg-gradient-to-br from-emerald-300 via-teal-200 to-cyan-300 bg-clip-text text-transparent drop-shadow-[0_2px_18px_rgba(16,185,129,.25)]">
             What We Do
           </span>
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-center text-emerald-50/80">
-          Premium landscaping & hardscaping, crafted with precision.
+        <p className="mt-3 text-emerald-50/80">
+          Browse our services—tap to zoom any photo.
         </p>
       </div>
 
-      {/* Grid */}
-      <div className="mt-14 grid grid-cols-1 gap-6 px-6 sm:grid-cols-2 lg:grid-cols-3 md:px-16 items-stretch">
-        {SERVICES.map((s, i) => {
-          const isActive = !isDesktop && activeId === s.id;
-          const file = FILE_BY_ID[s.id];
-
-          return (
-            <motion.article
-              key={s.id}
-              initial={{ opacity: 0, y: 32, scale: 0.98 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, delay: i * 0.05, ease: "easeOut" }}
-              className="group relative h-full"
-            >
-              {/* SOLID BORDER CARD */}
-              <div
-                onClick={() => onCardClick(s.id)}
-                className={[
-                  "relative flex h-full flex-col rounded-2xl",
-                  "border border-white/12 bg-[#0b1713]/70 backdrop-blur-xl",
-                  "transition-all duration-300",
-                  isActive
-                    ? "-translate-y-[2px] shadow-[0_10px_40px_rgba(16,185,129,.25)] border-emerald-300/30"
-                    : "md:group-hover:-translate-y-[2px] md:group-hover:shadow-[0_10px_40px_rgba(16,185,129,.25)] md:group-hover:border-emerald-300/30",
-                ].join(" ")}
-              >
-                {/* IMAGE — rounded ONLY on top, no padding, fits area */}
-                <div className="relative w-full h-[230px] md:h-[260px] lg:h-[300px] overflow-hidden rounded-t-2xl">
-                  {file && (
-                    <Image
-                      src={`/services/${file}`}
-                      alt={s.title}
-                      fill
-                      sizes="(min-width:1280px) 33vw, (min-width:768px) 50vw, 100vw"
-                      className="object-cover" // fills area edge-to-edge
-                      priority={i < 3}
-                    />
-                  )}
-                </div>
-
-                {/* TEXT PANEL — fills to the bottom */}
-                <div className="flex-1 rounded-b-2xl bg-gradient-to-b from-black/35 to-[#0d1b16]/65 p-6 md:p-7">
-                  <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-400 text-black shadow-lg shadow-emerald-500/20">
-                    <FaLeaf className="h-5 w-5" />
-                  </div>
-                  <h3 className="text-[18px] font-semibold leading-snug text-white/85">
-                    {s.title}
-                  </h3>
-                  <p className="mt-2 text-[15px] leading-relaxed text-white/65">
-                    {s.desc}
-                  </p>
-                </div>
-
-                {/* shine overlay (desktop hover / mobile tap) */}
-                <div
+      <div className="mx-auto mt-10 grid max-w-7xl grid-cols-1 gap-6 px-6 md:grid-cols-[320px_1fr] md:px-10">
+        {/* Tabs */}
+        <div className="md:sticky md:top-24">
+          <div className="no-scrollbar flex gap-2 overflow-x-auto md:block">
+            {SERVICES.map((s) => {
+              const selected = s.id === active;
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => setActive(s.id)}
                   className={[
-                    "pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-300",
-                    isActive
-                      ? "opacity-100"
-                      : "opacity-0 md:group-hover:opacity-100",
+                    "shrink-0 rounded-2xl border px-4 py-3 text-left transition md:w-full",
+                    selected
+                      ? "border-emerald-400/60 bg-emerald-400/10 text-emerald-100 shadow-[0_8px_30px_-12px_rgba(16,185,129,.6)]"
+                      : "border-white/10 bg-[#0b1713]/70 text-emerald-50/85 hover:border-emerald-400/40 hover:text-emerald-100",
                   ].join(" ")}
-                  style={{
-                    background:
-                      "radial-gradient(140px 70px at 50% -10%, rgba(255,255,255,.14), transparent 60%)",
-                  }}
-                />
+                >
+                  <div className="text-base font-semibold">{s.title}</div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Panel */}
+        <div className="min-h-[420px] rounded-3xl border border-white/10 bg-[#0b1713]/70 p-5 md:p-7 backdrop-blur-xl">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="space-y-6"
+            >
+              <div className="space-y-2">
+                <Title>{current.title}</Title>
+                <Body>{current.blurb}</Body>
               </div>
-            </motion.article>
-          );
-        })}
+
+              {/* Layouts */}
+              {current.type === "beforeAfter" && (
+                <BeforeAfter
+                  beforeSrc={current.imgs.before}
+                  afterSrc={current.imgs.after}
+                  onOpen={() =>
+                    openLightbox([current.imgs.before, current.imgs.after], 0)
+                  }
+                />
+              )}
+
+              {current.type === "gallery" && (
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  {current.imgs.map((src, i) => (
+                    <ImageTile
+                      key={src}
+                      src={src}
+                      alt={`${current.title} ${i + 1}`}
+                      onOpen={() => openLightbox(current.imgs, i)}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {current.type === "hero" && (
+                <ImageTile
+                  src={current.imgs[0]}
+                  alt={current.title}
+                  onOpen={() => openLightbox(current.imgs, 0)}
+                  h="h-[340px] md:h-[420px] lg:h-[460px]"
+                />
+              )}
+
+              {current.type === "masonry" && (
+                <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 [column-fill:_balance]">
+                  {current.imgs.map((src, i) => (
+                    <div key={src} className="mb-4 break-inside-avoid">
+                      <ImageTile
+                        src={src}
+                        alt={`${current.title} ${i + 1}`}
+                        onOpen={() => openLightbox(current.imgs, i)}
+                        h="h-[260px] md:h-[300px]"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {current.type === "spotlight" && (
+                <div className="grid grid-cols-1 items-center gap-5 md:grid-cols-[1.2fr_1fr]">
+                  <ImageTile
+                    src={current.imgs[0]}
+                    alt={current.title}
+                    onOpen={() => openLightbox(current.imgs, 0)}
+                    h="h-[320px] md:h-[380px]"
+                  />
+                  <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-4 text-emerald-50/90">
+                    <span className="text-sm uppercase tracking-wide text-emerald-200">
+                      Featured
+                    </span>
+                    <p className="mt-1">
+                      Clean lines, solid base prep, and better layout patterns
+                      keep simple stone work looking premium.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {current.type === "grid" && (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {current.imgs.map((src, i) => (
+                    <ImageTile
+                      key={src}
+                      src={src}
+                      alt={`${current.title} ${i + 1}`}
+                      onOpen={() => openLightbox(current.imgs, i)}
+                    />
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
+
+      {/* Utilities */}
+      <style jsx global>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+
+      {/* Lightbox mount */}
+      <Lightbox
+        open={lbOpen}
+        images={lbImages}
+        index={lbIndex}
+        onClose={() => setLbOpen(false)}
+        setIndex={setLbIndex}
+      />
     </section>
   );
 }

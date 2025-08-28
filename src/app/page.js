@@ -8,11 +8,12 @@ import FooterPage from "@/components/FooterPage";
 import BeforeAfterGrid from "@/components/BeforeAfterGrid";
 import BeforeAfterVideosSection from "@/components/BeforeAfterVideosSection";
 import GeneralProjectsSection from "@/components/GeneralProjectsSection";
+import ContactSection from "@/components/ContactSection";
 
 export default function Home() {
   return (
     <>
-      <div className="mt-20 md:mt-24 lg:mt-25">
+      <div className="mt-20 md:mt-24 lg:mt-45">
         <HeroSection />
       </div>
 
@@ -34,6 +35,9 @@ export default function Home() {
       </div> */}
       <div className="mt-12 md:mt-24 lg:mt-32">
         <Testimonials />
+      </div>
+      <div className="mt-12 md:mt-24 lg:mt-32">
+        <ContactSection />
       </div>
       <div className="mt-12 md:mt-24 lg:mt-32">
         <FooterPage />
