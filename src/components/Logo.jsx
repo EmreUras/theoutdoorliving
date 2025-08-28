@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function Logo({ className = "" }) {
   return (
     <Image
-      src="/logo.svg"
+      src="/LOGO.svg"
       alt="Outdoor Living logo"
       width={150} // adjust as needed
       height={150} // adjust as needed
